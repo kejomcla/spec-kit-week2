@@ -1,0 +1,12 @@
+{
+  "name": "quote-of-the-day",
+  "version": "1.0.0",
+  "description": "A lightweight quote of the day single page web application",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/unit/*.test.js"
+  },
+  "keywords": ["quotes", "quote-of-the-day", "spec-kit"],
+  "author": "Kellar McLaughlin",
+  "license": "MIT"
+}

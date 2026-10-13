@@ -9,10 +9,10 @@
 
 **Purpose**: Project initialization and basic workspace structure
 
-- [ ] T001 Create project directories (`src/data/`, `src/services/`, `tests/unit/`) per implementation plan
-- [ ] T002 [P] Create `package.json` with `"type": "module"` and test command `"test": "node --test tests/unit/"` in `package.json`
-- [ ] T003 [P] Create baseline semantic HTML shell with metadata, viewport, and stylesheet link in `index.html`
-- [ ] T004 [P] Create CSS baseline reset, typography, and color variables in `styles.css`
+- [X] T001 Create project directories (`src/data/`, `src/services/`, `tests/unit/`) per implementation plan
+- [X] T002 [P] Create `package.json` with `"type": "module"` and test command `"test": "node --test tests/unit/*.test.js"` in `package.json`
+- [X] T003 [P] Create baseline semantic HTML shell with metadata, viewport, and stylesheet link in `index.html`
+- [X] T004 [P] Create CSS baseline reset, typography, and color variables in `styles.css`
 
 ---
 
@@ -22,11 +22,11 @@
 
 ⚠️ **CRITICAL**: No user story implementation can begin until foundational services are complete and verified.
 
-- [ ] T005 Create built-in quote catalog with unique `id`, non-empty `text`, and non-empty `author` attributes in `src/data/quotes.js`
-- [ ] T006 [P] Create automated unit tests for QuoteService covering catalog retrieval and non-repeating `getRandomQuote(excludeId)` logic in `tests/unit/quote-service.test.js`
-- [ ] T007 Implement QuoteService satisfying contracts (`getAllQuotes`, `getRandomQuote`, `getQuoteById`) in `src/services/quote-service.js`
-- [ ] T008 [P] Create automated unit tests for FavoriteStore covering `isFavorite`, `toggleFavorite`, `getFavorites`, `localStorage` key `"qotd_favorites_v1"`, and in-memory fallback on storage errors in `tests/unit/favorite-store.test.js`
-- [ ] T009 Implement FavoriteStore with `localStorage` persistence and graceful fallback handling in `src/services/favorite-store.js`
+- [X] T005 Create built-in quote catalog with unique `id`, non-empty `text`, and non-empty `author` attributes in `src/data/quotes.js`
+- [X] T006 [P] Create automated unit tests for QuoteService covering catalog retrieval and non-repeating `getRandomQuote(excludeId)` logic in `tests/unit/quote-service.test.js`
+- [X] T007 Implement QuoteService satisfying contracts (`getAllQuotes`, `getRandomQuote`, `getQuoteById`) in `src/services/quote-service.js`
+- [X] T008 [P] Create automated unit tests for FavoriteStore covering `isFavorite`, `toggleFavorite`, `getFavorites`, `localStorage` key `"qotd_favorites_v1"`, and in-memory fallback on storage errors in `tests/unit/favorite-store.test.js`
+- [X] T009 Implement FavoriteStore with `localStorage` persistence and graceful fallback handling in `src/services/favorite-store.js`
 
 **Checkpoint**: Foundation ready — all domain services tested and ready for user story integration.
 
@@ -40,9 +40,9 @@
 
 ### Implementation for User Story 1
 
-- [ ] T010 [P] [US1] Create quote display container with `#quote-card`, `#quote-text`, `#quote-author`, and `aria-live="polite"` in `index.html`
-- [ ] T011 [P] [US1] Style quote card presentation, typography, and responsive centering in `styles.css`
-- [ ] T012 [US1] Implement application bootstrapping to select initial random quote and render text and author on `DOMContentLoaded` in `src/app.js`
+- [X] T010 [P] [US1] Create quote display container with `#quote-card`, `#quote-text`, `#quote-author`, and `aria-live="polite"` in `index.html`
+- [X] T011 [P] [US1] Style quote card presentation, typography, and responsive centering in `styles.css`
+- [X] T012 [US1] Implement application bootstrapping to select initial random quote and render text and author on `DOMContentLoaded` in `src/app.js`
 
 **Checkpoint**: User Story 1 complete — viable MVP delivers random quote display on load.
 
@@ -56,9 +56,9 @@
 
 ### Implementation for User Story 2
 
-- [ ] T013 [P] [US2] Add accessible "New quote" button with `id="new-quote-btn"` and `aria-label="Get another quote"` in `index.html`
-- [ ] T014 [P] [US2] Style "New quote" button with hover, active, and accessible focus outlines in `styles.css`
-- [ ] T015 [US2] Wire `#new-quote-btn` click event listener to request a non-repeating quote via `QuoteService.getRandomQuote` and update the DOM in `src/app.js`
+- [X] T013 [P] [US2] Add accessible "New quote" button with `id="new-quote-btn"` and `aria-label="Get another quote"` in `index.html`
+- [X] T014 [P] [US2] Style "New quote" button with hover, active, and accessible focus outlines in `styles.css`
+- [X] T015 [US2] Wire `#new-quote-btn` click event listener to request a non-repeating quote via `QuoteService.getRandomQuote` and update the DOM in `src/app.js`
 
 **Checkpoint**: User Stories 1 and 2 complete — users can view quotes and generate new ones on demand.
 
@@ -72,9 +72,9 @@
 
 ### Implementation for User Story 3
 
-- [ ] T016 [P] [US3] Add accessible favorite toggle button with `id="favorite-btn"`, `aria-pressed="false"`, and `aria-label="Toggle favorite"` in `index.html`
-- [ ] T017 [P] [US3] Style favorite button active/inactive states with visual icon and smooth transitions in `styles.css`
-- [ ] T018 [US3] Wire `#favorite-btn` click event to `FavoriteStore.toggleFavorite` and update visual state upon toggle and quote change in `src/app.js`
+- [X] T016 [P] [US3] Add accessible favorite toggle button with `id="favorite-btn"`, `aria-pressed="false"`, and `aria-label="Toggle favorite"` in `index.html`
+- [X] T017 [P] [US3] Style favorite button active/inactive states with visual icon and smooth transitions in `styles.css`
+- [X] T018 [US3] Wire `#favorite-btn` click event to `FavoriteStore.toggleFavorite` and update visual state upon toggle and quote change in `src/app.js`
 
 **Checkpoint**: All three user stories complete — full functional feature set implemented.
 
@@ -84,9 +84,9 @@
 
 **Purpose**: Verification, accessibility hardening, and documentation checks
 
-- [ ] T019 [P] Enhance mobile responsive styling, touch targets (>=44px), and keyboard navigation in `styles.css`
-- [ ] T020 Execute automated test suite with `node --test tests/unit/` and verify all tests pass
-- [ ] T021 Perform manual end-to-end validation across all scenarios documented in `specs/001-quote-of-the-day/quickstart.md`
+- [X] T019 [P] Enhance mobile responsive styling, touch targets (>=44px), and keyboard navigation in `styles.css`
+- [X] T020 Execute automated test suite with `node --test tests/unit/*.test.js` and verify all tests pass
+- [X] T021 Perform manual end-to-end validation across all scenarios documented in `specs/001-quote-of-the-day/quickstart.md`
 
 ---
 
@@ -147,4 +147,4 @@ Task: "T012 [US1] Implement application bootstrapping in src/app.js"
 1. Deliver MVP (US1: View quote).
 2. Add US2 (Generate new quote on demand).
 3. Add US3 (Favorite toggle & persistent storage across reloads).
-4. Run full test suite (`node --test tests/unit/`) and quickstart verification.
+4. Run full test suite (`node --test tests/unit/*.test.js`) and quickstart verification.
