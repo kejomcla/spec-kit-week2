@@ -6,7 +6,7 @@
 
 **Status**: Draft
 
-**Input**: User description: "A quote-of-the-day page: one random quote from a built-in list, a "New quote" button, and favoriting that persists across reloads."
+**Input**: User description: "A quote-of-the-day page: one random quote from a built-in list, a 'New quote' button, and favoriting that persists across reloads. Refinement: Add a diagonal shimmer effect when a previously favorited quote is rolled."
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -56,11 +56,29 @@ A user can mark any quote they appreciate as a favorite. When marked, the visual
 
 ---
 
+### User Story 4 - Favorited Quote Roll Celebration (Diagonal Shimmer) (Priority: P4)
+
+When a quote that was previously saved as a favorite is rolled (either on initial load or when selecting "New quote"), the system provides special celebratory visual feedback by triggering a brief diagonal shimmer effect across the quote card to immediately highlight that a saved favorite has appeared.
+
+**Why this priority**: Enhances the user experience and provides delightful visual feedback confirming that the system recognized their previously saved favorite.
+
+**Independent Test**: Can be tested independently by favoriting a quote, requesting new quotes until that favorited quote is rolled, and verifying that the diagonal shimmer effect triggers across the quote card upon presentation.
+
+**Acceptance Scenarios**:
+
+1. **Given** a quote was previously favorited, **When** that quote is selected and presented (on initial page load or upon clicking "New quote"), **Then** a temporary diagonal shimmer effect sweeps across the quote card.
+2. **Given** an unfavorited quote is presented, **When** the quote appears on screen, **Then** no diagonal shimmer effect is displayed.
+3. **Given** a user has system-level reduced motion preferences enabled, **When** a previously favorited quote is rolled, **Then** the motion animation is suppressed in adherence to accessibility settings.
+
+---
+
 ### Edge Cases
 
 - **Immediate Consecutive Random Pick**: When there are multiple quotes in the built-in list, consecutive activations of the "New quote" action must not pick the same quote repeatedly in succession.
 - **Single-Item or Small Collection**: If the built-in collection contains only one quote, activating the "New quote" action should remain responsive and re-display that quote without freezing or throwing errors.
 - **Rapid Repeated Actions**: If the user rapidly clicks the "New quote" or favorite toggle, the system must maintain state integrity without corrupted data or flickering state.
+- **Rapid Rolls on Favorited Quotes**: If consecutive rolls land on favorited quotes, the shimmer animation must cleanly re-trigger from the beginning without animation freezing or visual clipping.
+- **Accessibility & Reduced Motion**: If the user prefers reduced motion, the diagonal shimmer motion animation must be bypassed so as not to induce vestibular distress.
 - **Unavailable Persistent Storage**: If client-side persistence is blocked by browser restrictions (e.g., restricted mode or storage quota exceeded), favoriting must still function in-memory for the active session without crashing the user interface.
 - **Missing or Anonymous Attribution**: Quotes without a known author must display an appropriate fallback label (such as "Anonymous" or "Unknown") rather than blank or undefined text.
 
@@ -78,6 +96,9 @@ A user can mark any quote they appreciate as a favorite. When marked, the visual
 - **FR-008**: System MUST save the favorited status of quotes to client-side persistent storage immediately upon toggle.
 - **FR-009**: System MUST load saved favorites on initialization and synchronize the visual favorite state whenever a favorited quote is displayed.
 - **FR-010**: System MUST handle persistent storage errors gracefully, falling back to session-only storage without interrupting the user.
+- **FR-011**: When a previously favorited quote is presented (on initial page load or when rolled via "New quote"), the system MUST trigger a temporary diagonal shimmer visual animation across the quote card container.
+- **FR-012**: When an unfavorited quote is presented, the system MUST NOT trigger the diagonal shimmer animation.
+- **FR-013**: The system MUST honor user accessibility settings by disabling or bypassing the diagonal shimmer animation when reduced motion is preferred.
 
 ### Key Entities
 
@@ -93,6 +114,8 @@ A user can mark any quote they appreciate as a favorite. When marked, the visual
 - **SC-003**: 100% of favorited quotes retain their favorite state after the browser page is reloaded or restarted.
 - **SC-004**: Users can toggle favorite status with a single interaction (1 click or tap) with immediate visual feedback (under 100 milliseconds).
 - **SC-005**: 100% of built-in quotes have valid text and non-empty author attribution.
+- **SC-006**: The diagonal shimmer animation completes its visual pass in under 1.5 seconds and returns the card to its resting appearance.
+- **SC-007**: 100% of rolls landing on previously favorited quotes trigger the shimmer effect (unless reduced motion is enabled).
 
 ## Assumptions
 

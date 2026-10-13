@@ -13,6 +13,31 @@ class MockElement {
     this.textContent = "";
     this.attributes = new Map();
     this.listeners = new Map();
+    this._classes = new Set();
+  }
+
+  get classList() {
+    return {
+      add: (cls) => this._classes.add(cls),
+      remove: (cls) => this._classes.delete(cls),
+      contains: (cls) => this._classes.has(cls),
+      toggle: (cls, force) => {
+        if (force === undefined) {
+          if (this._classes.has(cls)) {
+            this._classes.delete(cls);
+            return false;
+          }
+          this._classes.add(cls);
+          return true;
+        }
+        if (force) {
+          this._classes.add(cls);
+          return true;
+        }
+        this._classes.delete(cls);
+        return false;
+      }
+    };
   }
 
   setAttribute(name, value) {
@@ -34,12 +59,17 @@ class MockElement {
     const handlers = this.listeners.get("click") || [];
     for (const h of handlers) h();
   }
+
+  trigger(event, data = {}) {
+    const handlers = this.listeners.get(event) || [];
+    for (const h of handlers) h(data);
+  }
 }
 
 class MockDocument {
   constructor() {
     this.elements = new Map();
-    ["quote-text", "quote-author", "new-quote-btn", "favorite-btn", "favorite-text"].forEach(id => {
+    ["quote-card", "quote-text", "quote-author", "new-quote-btn", "favorite-btn", "favorite-text"].forEach(id => {
       this.elements.set(id, new MockElement(id));
     });
   }
@@ -120,5 +150,40 @@ describe("QuoteApp Integration", () => {
     const favoriteBtn = doc.getElementById("favorite-btn");
     assert.equal(favoriteBtn.getAttribute("aria-pressed"), "true");
     assert.equal(doc.getElementById("favorite-text").textContent, "Favorited");
+  });
+
+  it("should trigger shimmer on quote-card when rolling a favorited quote (US4)", () => {
+    const card = doc.getElementById("quote-card");
+    const favQuote = sampleCatalog[0];
+    favoriteStore.toggleFavorite(favQuote.id); // favorited in store
+
+    app.currentQuote = favQuote;
+    app._renderCurrentQuote();
+
+    assert.equal(card.classList.contains("shimmer-active"), true, "Card should have shimmer-active class");
+  });
+
+  it("should not trigger shimmer on quote-card when rolling an unfavorited quote (US4)", () => {
+    const card = doc.getElementById("quote-card");
+    const unfavQuote = sampleCatalog[1];
+
+    app.currentQuote = unfavQuote;
+    app._renderCurrentQuote();
+
+    assert.equal(card.classList.contains("shimmer-active"), false, "Card must not have shimmer-active class");
+  });
+
+  it("should remove shimmer-active when animationend is triggered (US4)", () => {
+    const card = doc.getElementById("quote-card");
+    const favQuote = sampleCatalog[0];
+    favoriteStore.toggleFavorite(favQuote.id);
+
+    app.currentQuote = favQuote;
+    app._renderCurrentQuote();
+    assert.equal(card.classList.contains("shimmer-active"), true);
+
+    // Simulate animationend event
+    card.trigger("animationend");
+    assert.equal(card.classList.contains("shimmer-active"), false, "shimmer-active should be removed on animationend");
   });
 });

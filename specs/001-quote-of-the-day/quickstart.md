@@ -29,27 +29,26 @@ npx serve .
 ```
 
 ### Option C: Direct File Access
-Open `index.html` directly in your browser. (Note: standard ES modules may require a local server in some strict browser security environments; serving via HTTP is recommended).
+Open `index.html` directly in your browser.
 
 ---
 
 ## 3. Running Automated Tests
 
-To run the automated domain and unit tests verifying the Quote Service and Favorite Store:
+To run the automated domain and integration tests:
 
 ```bash
-node --test tests/unit/
+npm test
 ```
 
 Expected output:
 - `tests/unit/quote-service.test.js`: All tests pass (validates random pick, non-repetition, catalog integrity).
 - `tests/unit/favorite-store.test.js`: All tests pass (validates toggling, persistence serialization, fallback on storage failure).
+- `tests/unit/app.test.js`: All tests pass (validates DOM bootstrapping, new quote clicks, favorite toggles, and shimmer triggering on favorited rolls).
 
 ---
 
 ## 4. End-to-End Manual Validation Scenarios
-
-Follow these scenarios to verify the feature against acceptance criteria:
 
 ### Scenario 1: Initial Render & Quote Presentation
 1. Open the application URL in a clean browser window.
@@ -79,3 +78,17 @@ Follow these scenarios to verify the feature against acceptance criteria:
 2. **Verify**:
    - The favorite indicator switches to inactive (`aria-pressed="false"`).
 3. Reload the browser and return to that quote; verify it remains unfavorited.
+
+### Scenario 5: Diagonal Shimmer on Favorited Quote Roll
+1. Favorite any quote on screen.
+2. Click "New quote" until you cycle to other quotes (verify no shimmer on unfavorited quotes).
+3. Continue clicking "New quote" until the favorited quote appears again.
+4. **Verify**:
+   - A smooth diagonal shimmer light sweep glides across the quote card container.
+   - The shimmer animation finishes within ~1 second and cleans up without lingering visual artifacts.
+
+### Scenario 6: Reduced Motion Accessibility Validation
+1. Enable "Reduce motion" in your operating system or browser developer tools rendering panel.
+2. Cycle to a favorited quote.
+3. **Verify**:
+   - No motion or sliding shimmer animation executes across the screen.

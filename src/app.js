@@ -17,6 +17,7 @@ export class QuoteApp {
 
     this.currentQuote = null;
 
+    this.quoteCard = this.doc.getElementById("quote-card");
     this.quoteText = this.doc.getElementById("quote-text");
     this.quoteAuthor = this.doc.getElementById("quote-author");
     this.newQuoteBtn = this.doc.getElementById("new-quote-btn");
@@ -37,6 +38,12 @@ export class QuoteApp {
 
     if (this.favoriteBtn) {
       this.favoriteBtn.addEventListener("click", () => this.toggleFavorite());
+    }
+
+    if (this.quoteCard) {
+      this.quoteCard.addEventListener("animationend", () => {
+        this.quoteCard.classList.remove("shimmer-active");
+      });
     }
   }
 
@@ -68,7 +75,7 @@ export class QuoteApp {
   }
 
   /**
-   * Renders the current quote content and updates favorite state.
+   * Renders the current quote content, updates favorite state, and triggers shimmer if favorited.
    * @private
    */
   _renderCurrentQuote() {
@@ -84,6 +91,26 @@ export class QuoteApp {
 
     const isFav = this.favoriteStore.isFavorite(this.currentQuote.id);
     this._updateFavoriteUI(isFav);
+    this._handleShimmerEffect(isFav);
+  }
+
+  /**
+   * Triggers or clears the diagonal shimmer animation based on favorite status.
+   * @param {boolean} isFav
+   * @private
+   */
+  _handleShimmerEffect(isFav) {
+    if (!this.quoteCard) return;
+
+    this.quoteCard.classList.remove("shimmer-active");
+
+    if (isFav) {
+      // Force DOM reflow to allow clean re-animation if consecutive rolls are favorited
+      if (typeof this.quoteCard.offsetWidth === "number") {
+        void this.quoteCard.offsetWidth;
+      }
+      this.quoteCard.classList.add("shimmer-active");
+    }
   }
 
   /**

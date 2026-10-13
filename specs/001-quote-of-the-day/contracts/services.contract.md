@@ -38,11 +38,6 @@ interface IQuoteService {
 }
 ```
 
-### Preconditions & Postconditions
-- **`getRandomQuote(excludeId)`**:
-  - *Precondition*: Catalog has at least 1 quote.
-  - *Postcondition*: If catalog length > 1, returned `Quote.id !== excludeId`.
-
 ---
 
 ## 2. `FavoriteStore` Contract
@@ -76,25 +71,24 @@ interface IFavoriteStore {
 }
 ```
 
-### Exception Safety
-- Methods MUST NOT throw when `localStorage` is disabled or throws `QuotaExceededError`. The store falls back silently to session in-memory state.
-
 ---
 
 ## 3. DOM & UI Component Contract
 
-Defines the HTML structure and accessibility bindings required by the application shell.
+Defines the HTML structure, accessibility bindings, and visual animation states.
 
-### Required DOM Elements
-| Selector / ID | Tag | Purpose | Accessible Attributes |
+### Required DOM Elements & Classes
+| Selector / Class | Tag | Purpose | Accessible Attributes |
 | :--- | :--- | :--- | :--- |
 | `#quote-card` | `<article>` | Container for the displayed quote | `aria-live="polite"` |
+| `#quote-card.shimmer-active` | Class | Active state triggering diagonal shimmer animation | Cleared automatically on `animationend` |
 | `#quote-text` | `<blockquote>` | Text of the quotation | None |
 | `#quote-author` | `<cite>` | Author of the quotation | None |
 | `#new-quote-btn` | `<button>` | Action to request another random quote | `aria-label="Get another quote"` |
 | `#favorite-btn` | `<button>` | Toggle button for favorite state | `aria-pressed="false|true"`, `aria-label="Toggle favorite"` |
 
-### Event Behaviors
-- **Click `#new-quote-btn`**: Triggers `getRandomQuote(currentQuote.id)` and re-renders `#quote-card`.
-- **Click `#favorite-btn`**: Triggers `toggleFavorite(currentQuote.id)` and toggles `aria-pressed` state and visual icon.
-- **Keyboard navigation**: Both buttons MUST be reachable and activatable via `Tab` and `Enter`/`Space`.
+### Animation & Accessibility Contract
+- **Diagonal Shimmer**:
+  - Activated by appending class `shimmer-active` to `#quote-card` whenever a favorited quote is rolled.
+  - Automatically removed upon receipt of `animationend` event or when an unfavorited quote is rolled.
+  - MUST be suppressed under `@media (prefers-reduced-motion: reduce)` with `animation: none !important`.

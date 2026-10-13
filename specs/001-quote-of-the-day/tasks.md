@@ -76,17 +76,36 @@
 - [X] T017 [P] [US3] Style favorite button active/inactive states with visual icon and smooth transitions in `styles.css`
 - [X] T018 [US3] Wire `#favorite-btn` click event to `FavoriteStore.toggleFavorite` and update visual state upon toggle and quote change in `src/app.js`
 
-**Checkpoint**: All three user stories complete — full functional feature set implemented.
+**Checkpoint**: User Stories 1, 2, and 3 complete — core feature set implemented.
 
 ---
 
-## Phase 6: Polish & Cross-Cutting Concerns
+## Phase 6: User Story 4 - Favorited Quote Roll Celebration (Diagonal Shimmer) (Priority: P4)
+
+**Goal**: Trigger a temporary diagonal shimmer animation across `#quote-card` when a previously favorited quote is rolled, while respecting reduced motion preferences.
+
+**Independent Test**: Roll a previously favorited quote; verify that `#quote-card` receives `.shimmer-active` and animates a diagonal sweep across the card before resetting.
+
+### Tests for User Story 4
+
+- [X] T019 [P] [US4] Add automated unit tests verifying that QuoteApp adds `.shimmer-active` when rolling a favorited quote and removes it on unfavorited roll in `tests/unit/app.test.js`
+
+### Implementation for User Story 4
+
+- [X] T020 [P] [US4] Define `@keyframes shimmer` (115° diagonal sweep), `#quote-card::after` pseudo-element styling, and `@media (prefers-reduced-motion: reduce)` suppression in `styles.css`
+- [X] T021 [US4] Implement shimmer triggering on favorited roll and `animationend` cleanup in `src/app.js`
+
+**Checkpoint**: User Story 4 complete — celebratory shimmer effect triggers cleanly for favorited rolls.
+
+---
+
+## Phase 7: Polish & Cross-Cutting Concerns
 
 **Purpose**: Verification, accessibility hardening, and documentation checks
 
-- [X] T019 [P] Enhance mobile responsive styling, touch targets (>=44px), and keyboard navigation in `styles.css`
-- [X] T020 Execute automated test suite with `node --test tests/unit/*.test.js` and verify all tests pass
-- [X] T021 Perform manual end-to-end validation across all scenarios documented in `specs/001-quote-of-the-day/quickstart.md`
+- [X] T022 [P] Verify touch targets (>=44px), high contrast legibility, and keyboard focus outlines across all viewport sizes in `styles.css`
+- [X] T023 Execute automated test suite with `npm test` and verify all tests pass
+- [X] T024 Perform manual end-to-end validation across all scenarios in `specs/001-quote-of-the-day/quickstart.md`
 
 ---
 
@@ -95,56 +114,45 @@
 ### Phase Dependencies
 
 ```text
-Phase 1: Setup ───► Phase 2: Foundational ───► Phase 3: User Story 1 (P1 MVP)
-                                                        │
-                                                        ├───► Phase 4: User Story 2 (P2)
-                                                        │
-                                                        └───► Phase 5: User Story 3 (P3)
-                                                                    │
-                                                                    ▼
-                                                            Phase 6: Polish
+Phase 1: Setup ───► Phase 2: Foundational ───► Phase 3: US1 (P1 MVP)
+                                                    │
+                                                    ├───► Phase 4: US2 (P2)
+                                                    │
+                                                    └───► Phase 5: US3 (P3)
+                                                                │
+                                                                ▼
+                                                        Phase 6: US4 (P4 Shimmer)
+                                                                │
+                                                                ▼
+                                                        Phase 7: Polish
 ```
 
-- **Phase 1 (Setup)**: Can start immediately; no dependencies.
-- **Phase 2 (Foundational)**: Depends on Phase 1 completion; blocks all user stories.
-- **Phase 3 (User Story 1)**: Depends on Phase 2; produces the working MVP.
-- **Phase 4 (User Story 2)**: Depends on Phase 3 UI structure; adds interactive new quote flow.
-- **Phase 5 (User Story 3)**: Depends on Phase 3 & 4; adds favorite toggling and persistence synchronization.
-- **Phase 6 (Polish)**: Runs after all user stories are complete.
+- **Phase 6 (User Story 4)**: Depends on Phase 5 completion (`FavoriteStore` and favorite state coordination).
+- **Phase 7 (Polish)**: Runs after all user stories are complete.
 
 ### Parallel Opportunities
 
-- In Phase 1: `T002`, `T003`, `T004` can run in parallel.
-- In Phase 2: Test creation `T006` and `T008` can run in parallel before services are implemented.
-- In Phase 3: HTML markup `T010` and styling `T011` can run in parallel before DOM event wiring `T012`.
-- In Phase 4: Button markup `T013` and styling `T014` can run in parallel before event wiring `T015`.
-- In Phase 5: Button markup `T016` and styling `T017` can run in parallel before event wiring `T018`.
+- In Phase 6: Test creation `T019` and CSS keyframes styling `T020` can run in parallel before event wiring `T021`.
 
 ---
 
-## Parallel Example: User Story 1
+## Parallel Example: User Story 4
 
 ```bash
-# Launch markup and styling in parallel:
-Task: "T010 [P] [US1] Create quote display container in index.html"
-Task: "T011 [P] [US1] Style quote card presentation in styles.css"
+# Launch test update and CSS animation in parallel:
+Task: "T019 [P] [US4] Add automated unit tests verifying that QuoteApp adds .shimmer-active in tests/unit/app.test.js"
+Task: "T020 [P] [US4] Define @keyframes shimmer and prefers-reduced-motion in styles.css"
 
-# Then wire logic:
-Task: "T012 [US1] Implement application bootstrapping in src/app.js"
+# Then wire coordination:
+Task: "T021 [US4] Implement shimmer triggering on favorited roll and animationend cleanup in src/app.js"
 ```
 
 ---
 
 ## Implementation Strategy
 
-### MVP First (User Story 1 Only)
-1. Complete **Phase 1** (Setup).
-2. Complete **Phase 2** (Foundational data catalog and QuoteService).
-3. Complete **Phase 3** (User Story 1: initial random quote display).
-4. **Validate MVP**: Open `index.html` to confirm working standalone quote-of-the-day display.
-
 ### Incremental Delivery
-1. Deliver MVP (US1: View quote).
-2. Add US2 (Generate new quote on demand).
-3. Add US3 (Favorite toggle & persistent storage across reloads).
-4. Run full test suite (`node --test tests/unit/*.test.js`) and quickstart verification.
+1. Foundational + US1-US3 delivered (MVP + New Quote + Persistent Favorites).
+2. Implement US4 (Diagonal shimmer celebration for favorited rolls).
+3. Run full automated test suite (`npm test`).
+4. Validate manual end-to-end scenarios (including reduced-motion).

@@ -45,7 +45,7 @@ Implement a selection function that accepts the quote catalog and the ID of the 
 
 ### Rationale
 - Fulfills FR-005 and avoids user frustration from clicking "New quote" and seeing no visible change.
-- A simple deterministic filter/exclusion `catalog.filter(q => q.id !== currentId)` followed by `Math.floor(Math.random() * pool.length)` executes in $O(N)$ with $N \approx 20\text{–}50$, completing in $<0.1\text{ms}$.
+- A simple deterministic filter/exclusion `catalog.filter(q => q.id !== excludeId)` followed by `Math.floor(Math.random() * pool.length)` executes in $O(N)$ with $N \approx 20\text{–}50$, completing in $<0.1\text{ms}$.
 
 ### Alternatives Considered
 - **Shuffled playlist / deck approach**: Shuffling an array and popping from it until empty. Rejected as unnecessarily stateful for simple "random pick with no immediate repeat", though could be considered for future extensions.
@@ -68,8 +68,27 @@ Implement a selection function that accepts the quote catalog and the ID of the 
 ## 5. Automated Verification & Testing Strategy
 
 ### Decision
-Use standard Node.js built-in test runner (`node --test` introduced in Node.js 18+) or a lightweight zero-dependency Node test harness to test the pure domain logic (`QuoteService` and `FavoriteStorage` abstraction) in CI and local development.
+Use standard Node.js built-in test runner (`node --test tests/unit/*.test.js`) to test the pure domain logic (`QuoteService` and `FavoriteStore` abstraction) and DOM coordination (`QuoteApp`) in CI and local development.
 
 ### Rationale
 - Fulfills Constitutional Principle II (Test-First & Automated Verification) without introducing heavy npm dependencies or bundlers.
 - Domain logic is kept decoupled from DOM APIs, allowing rapid unit testing.
+
+---
+
+## 6. Diagonal Shimmer Effect for Favorited Quote Rolls
+
+### Decision
+Implement the diagonal shimmer celebration using pure CSS pseudo-element animation (`#quote-card::after` with `overflow: hidden`) triggered via an active class (`.shimmer-active`) on `#quote-card`.
+- **Visual Design**: A diagonal sweep (115° linear gradient) with a semi-transparent light/accent band moving smoothly across the card surface (`translateX(-100%)` to `translateX(200%)`) over ~1 second.
+- **Lifecycle Management**: Whenever a quote is displayed, if it is in favorites, `QuoteApp` resets and applies `.shimmer-active`. An `animationend` listener automatically cleans up the class. If the current quote is not favorited, `.shimmer-active` is removed immediately.
+- **Accessibility & Motion Preference**: An `@media (prefers-reduced-motion: reduce)` rule strictly disables the animation and hides the pseudo-element, preventing visual or vestibular discomfort.
+
+### Rationale
+- CSS hardware-accelerated transforms (`transform: translateX(...)`) ensure smooth 60fps rendering without jank or layout thrashing.
+- Using a pseudo-element avoids adding extra DOM nodes to `index.html`.
+- Automatic cleanup on `animationend` ensures consecutive rolls on favorited quotes replay the shimmer without freezing.
+
+### Alternatives Considered
+- **JavaScript `requestAnimationFrame` canvas overlay**: Over-engineered, adds unnecessary computational overhead and battery drain for a simple decorative effect.
+- **Third-party animation libraries (GSAP, Lottie)**: Rejected per project requirements and Constitution (Principle V: Zero unnecessary dependencies).

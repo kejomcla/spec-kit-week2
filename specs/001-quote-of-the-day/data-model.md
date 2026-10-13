@@ -55,12 +55,15 @@ stateDiagram-v2
       1. Load favoriteIds from localStorage
       2. Pick initial random quote Q_init
       3. Render Q_init & favorite status
+      4. If Q_init is favorited: trigger diagonal shimmer
     end note
 
     Ready --> Ready: Click "New quote"
     note right of Ready
-      Pick Q_new from Catalog (Q_new != Q_current)
-      Update view with Q_new and isFavorite(Q_new.id)
+      1. Pick Q_new (Q_new != Q_current)
+      2. Render Q_new & favorite status
+      3. If Q_new is favorited: trigger diagonal shimmer
+      4. If Q_new is NOT favorited: clear shimmer
     end note
 
     Ready --> Favorited: Toggle Favorite (when currently unfavorited)
@@ -88,10 +91,12 @@ stateDiagram-v2
    - `storage.loadFavorites()` retrieves stored array of IDs from `localStorage['qotd_favorites_v1']`.
    - `quoteService.getRandomQuote(null)` returns $Q_1$.
    - `ui.renderQuote(Q_1, storage.isFavorite(Q_1.id))`.
+   - If `storage.isFavorite(Q_1.id)` is true: `ui.triggerShimmer()`.
 2. **Next Quote**:
    - User clicks "New quote".
    - `quoteService.getRandomQuote(currentQuote.id)` returns $Q_2$ ($Q_2 \neq Q_1$).
    - `ui.renderQuote(Q_2, storage.isFavorite(Q_2.id))`.
+   - If `storage.isFavorite(Q_2.id)` is true: `ui.triggerShimmer()`; otherwise `ui.clearShimmer()`.
 3. **Toggle Favorite**:
    - User clicks favorite button for $Q_2$.
    - `storage.toggleFavorite(Q_2.id)` toggles membership and serializes to `localStorage`.
